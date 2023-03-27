@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<h1>All Posts</h1>
+<hr>
+{% for blog in blogs %}
+<!-- Card -->
+<div class="card mb-3">
+    <!-- Card Header -->
+    <div class="card-header">
+        <h1>
+            <a class="text-decoration-none" href="{% url 'blog_detail' blog.pk %}">{{ blog.title | slice:'60' }}</a>
+        </h1>
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <small class="mb-3">
+                <!-- Created time -->
+                <span>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    &nbsp;
+                    {{blog.created_on.date}}&nbsp;
+                </span>
+                &nbsp;|&nbsp;
+                <!-- Tag Icon -->
+                <i class="fa-solid fa-tags"></i>
+                &nbsp;
+                <!-- Categories -->
+                {% for category in blog.category.all %}
+                <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">#{{ category.title }}</a>
+                &nbsp;
+                {% endfor %}
+            </small>
+            <!-- Post Body Text -->
+            <p>{{ blog.body | slice:"400"}}...</p>
+            <!-- Card Footer -->
+            <footer class="blockquote-footer">
+                Someone famous in
+                <cite title="Source Title">Source Title</cite>
+            </footer>
+        </blockquote>
+    </div>
+</div>
+{% endfor %}
+{% endblock page_content %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<h1>{{ category | title }}</h1>
+<hr>
+{% if posts %}
+    {% for post in posts %}
+<!--****************************-->
+<div class="card mb-3">
+    <div class="card-header">
+        <h1>
+            <a class="text-decoration-none" href="{% url 'blog_detail' post.pk %}">{{ post.title | slice:'3  0' }}...</a>
+        </h1>
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <small>
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                &nbsp;
+                {{post.created_on.date}} &nbsp;|&nbsp;
+                <i class="fa-solid fa-tags"></i>
+                &nbsp;
+                {% for category in post.category.all %}
+                <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}"># {{ category.title }}</a>
+                &nbsp;
+                {% endfor %}
+            </small>
+            <p>{{ post.body | slice:"400"}}...</p>
+            <footer class="blockquote-footer">
+                Someone famous in
+                <cite title="Source Title">Source Title</cite>
+            </footer>
+        </blockquote>
+    </div>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+    Hech qanday ma'lumot yo'q
+</div>
+{% endif %}
+{% endblock page_content %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<h1>Detail</h1>
+<hr>
+{% if blog_detail %}
+<small>
+    <!-- Post Title -->
+    <h1>{{ blog_detail.title | title}}</h1>
+    <!-- Post Category -->
+    <p>
+        <!-- TimeSince -->
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        &nbsp;
+        {{blog_detail.created_on | timesince }} ago &nbsp;|&nbsp;
+        <!-- All Categories -->
+        <i class="fa-solid fa-tags"></i>
+        &nbsp;
+        {% for category in blog_detail.category.all %}
+        <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}"># {{ category.title }}</a>
+        {% endfor %}
+    </p>
+    <!-- Post body -->
+    <p class="">
+        <p class="fs-5">{{ blog_detail.body}}</p>
+    </p>
+    <!-- Post words count -->
+    <pre>{{ blog_detail.body | wordcount }} words</pre>
+</small>
+<!-- Comment -->
+<h3 class="mb-3 sticky-top">Leave Comment:</h3>
+<!-- Comment Form -->
+<form action="/blog/detail/{{ blog_detail.id }}/" method="post">
+    {% csrf_token %}
+    <!-- Author Input -->
+    <div class="form-group">
+        {{ form.author }}
+    </div>
+    <!-- Comment Input -->
+    <div class="form-group">
+        {{ form.body }}
+    </div>
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary mb-3">Submit</button>
+</form>
+<!-- All Users Comments-->
+<h3 class="sticky-top">Comments:</h3>
+{% for comment in comments %}
+<div class="d-flex justify-content-between">
+    <!-- Comment Author -->
+    <span class="fs-5">
+        <b>{{ comment.author }}</b>
+        wrote: &nbsp;
+    </span>
+    <!-- Comment datetime -->
+    <span>
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        &nbsp;
+        {{comment.created_on.date | timesince}} ago &nbsp;
+    </span>
+</div>
+<!-- Commen Body -->
+<p>{{ comment.body }}</p>
+<hr>
+{% endfor %}
+{% else %}
+<!-- Data Not Found -->
+<div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+    Hech qanday ma'lumot yo'q
+</div>
+{% endif %}
+{% endblock page_content %}

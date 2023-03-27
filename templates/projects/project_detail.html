@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block project_detail %}
+{% if detail %}
+<h1>{{ detail.id }}. {{ detail.title }}</h1>
+<p>{{ detail.description }}</p>
+<p>{{ detail.technology }}</p>
+<p>{{ detail.image }}</p>
+<p>{{ static }}</p>
+<img src="{% static 'detail.image' %}" alt="rasm">
+{% else %}
+<h1>Hech qanday detail ma'lumot yo'q</h1>
+{% endif %}
+{% endblock project_detail %}
