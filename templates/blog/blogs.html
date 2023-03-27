@@ -1,15 +1,26 @@
 {% extends 'base.html' %}
-
+<!-- All Pots -->
 {% block page_content %}
-<h1>All Posts</h1>
+<!-- Count Posts -->
+<p>
+    <code class="fs-4">
+        <b>{{ total }}</b>
+    </code>
+    &nbsp; results for &nbsp;
+    <q class="fs-4">
+        <code>All Posts</code>
+    </q>
+</p>
 <hr>
+{% if posts %}
+<!-- Count Posts -->
 {% for blog in blogs %}
 <!-- Card -->
 <div class="card mb-3">
     <!-- Card Header -->
     <div class="card-header">
         <h1>
-            <a class="text-decoration-none" href="{% url 'blog_detail' blog.pk %}">{{ blog.title | slice:'60' }}</a>
+            <a class="text-decoration-none text-primary-emphasis" href="{% url 'blog_detail' blog.pk %}">{{ blog.title|truncatewords:4 }}</a>
         </h1>
     </div>
     <!-- Card Body -->
@@ -28,12 +39,14 @@
                 &nbsp;
                 <!-- Categories -->
                 {% for category in blog.category.all %}
-                <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">#{{ category.title }}</a>
+                <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
+                    <b>#{{ category.title }}</b>
+                </a>
                 &nbsp;
                 {% endfor %}
             </small>
             <!-- Post Body Text -->
-            <p>{{ blog.body | slice:"400"}}...</p>
+            <p>{{ blog.body|truncatewords:50}}</p>
             <!-- Card Footer -->
             <footer class="blockquote-footer">
                 Someone famous in
@@ -43,4 +56,34 @@
     </div>
 </div>
 {% endfor %}
+{% else %}
+<!-- Data Not Found -->
+<div class="alert alert-primary" role="alert">
+    There is no information
+</div>
+{% endif %}
+
+
 {% endblock page_content %}
+<!-- Categories -->
+{% block all_categorys %}
+{% if all_categories %}
+<div class="card border-secondary-emphasis mb-3 sticky-top" style="max-width: 24rem; top:105px">
+    <div class="card-header">
+        <b class="text-primary-emphasis">All Post Categories</b>
+    </div>
+    <div class="card-body text-secondary">
+        <!-- All Categories -->
+        {% for category in all_categories %}
+        <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
+            <span class="">#{{ category.title }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    There is no information
+</div>
+{% endif %}
+{% endblock all_categorys %}

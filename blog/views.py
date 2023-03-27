@@ -1,21 +1,27 @@
 from django.shortcuts import render, redirect
-from blog.models import Post, Comment
+from blog.models import Post, Comment, Category
 from blog.forms import CommentForm
 # Hamma Bloglar Ro'yxati qaytaruvchi funksiya
 def blogs(request):
     blogs = Post.objects.all()
     reverse_blogs = blogs.order_by('-created_on')
+    all_categories = Category.objects.all()
     context = {
-        'blogs': reverse_blogs
+        'blogs': reverse_blogs,
+        'total': len(reverse_blogs),
+        'all_categories': all_categories,
     }
     return render(request, 'blog/blogs.html', context)
 
 # Blog category filter qilib qidirib olish.
 def blog_category(request, category):
     posts = Post.objects.filter(category__title__contains=category).order_by('-created_on')
+    all_categories = Category.objects.all()
     context = {
         'posts': posts,
-        'category': category
+        'category': category,
+        'total': len(posts),
+        'all_categories': all_categories,
     }
     return render(request, 'blog/category.html', context)
 
@@ -23,12 +29,16 @@ def blog_category(request, category):
 
 # Blog haqida batavsil ma'lumot beruvchi funksiya
 def blog_detail(request, pk):
+    comments = 0
     try:
         blog_detail = Post.objects.get(pk=pk)
-        comments = Comment.objects.filter(post=blog_detail)
+        if blog_detail:
+            comments = Comment.objects.filter(post=blog_detail).order_by('-created_on')
+        else:
+            comments = None
     except:
         blog_detail = None
-        comments = None
+        
     form = CommentForm()
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -41,10 +51,10 @@ def blog_detail(request, pk):
             comment.save()
             return redirect(f'/blog/detail/{blog_detail.id}')
 
-    comment = Comment.objects.filter(post=blog_detail)
     context = {
         'blog_detail': blog_detail,
-        'comments': comments.order_by('-created_on'),
-        'form': form
+        'comments': comments,
+        'form': form,
+        'count_comments': len(comments if comments else [])
     }
     return render(request, 'blog/detail.html', context)

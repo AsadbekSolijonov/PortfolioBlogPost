@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
-
+<!-- All Posts -->
 {% block page_content %}
-<h1>{{ category | title }}</h1>
+<!-- Count Posts -->
+<p>
+    <code class="fs-4">
+        <b>{{ total }}</b>
+    </code>
+    &nbsp; results for &nbsp;
+    <q class="fs-4">
+        <code>{{ category | title }}</code>
+    </q>
+</p>
+<!-- End Count Posts -->
 <hr>
 {% if posts %}
     {% for post in posts %}
-<!--****************************-->
 <div class="card mb-3">
     <div class="card-header">
         <h1>
-            <a class="text-decoration-none" href="{% url 'blog_detail' post.pk %}">{{ post.title | slice:'3  0' }}...</a>
+            <a class="text-decoration-none text-primary-emphasis" href="{% url 'blog_detail' post.pk %}">{{ post.title|truncatewords:4 }}</a>
         </h1>
     </div>
     <div class="card-body">
@@ -21,11 +30,13 @@
                 <i class="fa-solid fa-tags"></i>
                 &nbsp;
                 {% for category in post.category.all %}
-                <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}"># {{ category.title }}</a>
+                <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
+                    <b># {{ category.title }}</b>
+                </a>
                 &nbsp;
                 {% endfor %}
             </small>
-            <p>{{ post.body | slice:"400"}}...</p>
+            <p>{{ post.body|truncatewords:50 }}</p>
             <footer class="blockquote-footer">
                 Someone famous in
                 <cite title="Source Title">Source Title</cite>
@@ -36,8 +47,30 @@
 {% endfor %}
 
 {% else %}
-<div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
-    Hech qanday ma'lumot yo'q
+<div class="alert alert-primary" role="alert">
+    There is no information
 </div>
 {% endif %}
 {% endblock page_content %}
+<!-- categories -->
+{% block all_categorys %}
+{% if all_categories %}
+<div class="card border-secondary-emphasis mb-3 sticky-top" style="max-width: 24rem; top:105px">
+    <div class="card-header">
+        <b class="text-primary-emphasis">All Post Categories</b>
+    </div>
+    <div class="card-body text-secondary">
+        <!-- All Categories -->
+        {% for category in all_categories %}
+        <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
+            <span class="">#{{ category.title }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    There is no information
+</div>
+{% endif %}
+{% endblock all_categorys %}

@@ -1,36 +1,48 @@
 {% extends 'base.html' %}
-
+<!-- Post -->
 {% block page_content %}
-<h1>Detail</h1>
+<h1 id="top0">Image</h1>
 <hr>
 {% if blog_detail %}
 <small>
     <!-- Post Title -->
-    <h1>{{ blog_detail.title | title}}</h1>
+    <h1 class="text-primary-emphasis" id="{{blog_detail.title|slugify }}">{{ blog_detail.title|title}}</h1>
     <!-- Post Category -->
     <p>
+        <!-- Author -->
+        <span>by .....</span>
+        &nbsp;|&nbsp;
         <!-- TimeSince -->
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        &nbsp;
-        {{blog_detail.created_on | timesince }} ago &nbsp;|&nbsp;
+        <span class="text-secondary-emphasis">
+            <i class="fa-solid fa-clock"></i>
+            {{blog_detail.created_on}} &nbsp;|&nbsp;
+        </span>
+        <!-- Count Comments -->
+        <a class="text-secondary text-decoration-none" href="#users-comment">
+            <i class="fa-solid fa-comments"></i>
+            <span>{{count_comments}} Comments</span>
+        </a>
+        &nbsp;|&nbsp;
         <!-- All Categories -->
         <i class="fa-solid fa-tags"></i>
-        &nbsp;
         {% for category in blog_detail.category.all %}
-        <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}"># {{ category.title }}</a>
+        <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
+            <b># {{ category.title }}</b>
+        </a>
         {% endfor %}
     </p>
     <!-- Post body -->
     <p class="">
+        <!-- Post Words -->
         <p class="fs-5">{{ blog_detail.body}}</p>
+        <!-- Post words count -->
+        <p class="p-2 text-bg-light rounded-end text-center" style="width: 100px;">{{ blog_detail.body | wordcount }} words</p>
     </p>
-    <!-- Post words count -->
-    <pre>{{ blog_detail.body | wordcount }} words</pre>
 </small>
 <!-- Comment -->
-<h3 class="mb-3 sticky-top">Leave Comment:</h3>
+<h3 class="mb-3 text-primary-emphasis sticky-top bg-white" style="top: 87px">Leave Comment:</h3>
 <!-- Comment Form -->
-<form action="/blog/detail/{{ blog_detail.id }}/" method="post">
+<form action="{% url 'blog_detail' blog_detail.id  %}" method="post">
     {% csrf_token %}
     <!-- Author Input -->
     <div class="form-group">
@@ -41,32 +53,86 @@
         {{ form.body }}
     </div>
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary mb-3">Submit</button>
+    <button type="submit" class="btn btn-primary mb-3" id="submit">Submit</button>
 </form>
 <!-- All Users Comments-->
-<h3 class="sticky-top">Comments:</h3>
-{% for comment in comments %}
-<div class="d-flex justify-content-between">
-    <!-- Comment Author -->
-    <span class="fs-5">
-        <b>{{ comment.author }}</b>
-        wrote: &nbsp;
-    </span>
-    <!-- Comment datetime -->
-    <span>
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        &nbsp;
-        {{comment.created_on.date | timesince}} ago &nbsp;
-    </span>
+<h3 class="mb-3 sticky-top mt-4 text-primary-emphasis bg-white" style="top: 87px">Comments:</h3>
+<div class=" p-3 bg-body rounded shadow-sm">
+    <!-- Title -->
+    <h6 class="border-bottom pb-2 mb-0 text-secondary" id="users-comment">
+        Users
+        <!-- Count Comments -->
+        <i class="fa-solid fa-comments"></i>
+        <span>{{count_comments}} Comments</span>
+    </h6>
+    {% if comments %}
+    {% for comment in comments %}
+    <div class="d-flex text-muted pt-3">
+        <svg
+            class="bd-placeholder-img flex-shrink-0 me-2 rounded"
+            width="32"
+            height="32"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-label="Placeholder: 32x32"
+            preserveAspectRatio="xMidYMid slice"
+            focusable="false"
+        >
+            <!-- Hidden Time For image -->
+            <title> {{ comment.created_on | timesince }} ago</title>
+            <rect width="100%" height="100%" fill="#6f42c1"></rect>
+            <text
+                x="50%"
+                y="50%"
+                fill="#6f42c1"
+                dy=".3em"
+            >32x32</text>
+        </svg>
+        <!-- Body -->
+        <p class="pb-3 mb-0 small lh-sm border-bottom">
+            <strong class="d-block text-gray-dark">@{{ comment.author|lower }}</strong>
+            {{ comment.body }}
+        </p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="p-3 mt-5 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+        No Comment
+    </div>
+    {% endif %}
+    <small class="d-block text-end mt-3">
+        <a class="text-decoration-none" href="#top0">
+            <!-- Page Up button -->
+            <i class="fa-solid fs-3 fa-circle-chevron-up text-body-tertiary"></i>
+        </a>
+    </small>
 </div>
-<!-- Commen Body -->
-<p>{{ comment.body }}</p>
-<hr>
-{% endfor %}
 {% else %}
 <!-- Data Not Found -->
-<div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
-    Hech qanday ma'lumot yo'q
+<div class="alert alert-primary" role="alert">
+    There is no information
 </div>
 {% endif %}
 {% endblock page_content %}
+
+{% block all_categorys %}
+{% if all_categories %}
+<div class="card border-secondary-emphasis mb-3 sticky-top" style="max-width: 24rem; top:105px">
+    <div class="card-header">
+        <b class="text-primary-emphasis">All Post Categories</b>
+    </div>
+    <div class="card-body text-secondary">
+        <!-- All Categories -->
+        {% for category in all_categories %}
+        <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
+            <span class="">#{{ category.title }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+    There is no information
+</div>
+{% endif %}
+{% endblock all_categorys %}
