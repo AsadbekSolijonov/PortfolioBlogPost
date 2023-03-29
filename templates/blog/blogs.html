@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+<!-- Title -->
+{% block title %}
+All Blogs
+{% endblock %}
 <!-- All Pots -->
 {% block page_content %}
 <!-- Count Posts -->
@@ -12,8 +16,7 @@
     </q>
 </p>
 <hr>
-{% if posts %}
-<!-- Count Posts -->
+{% if blogs %}
 {% for blog in blogs %}
 <!-- Card -->
 <div class="card mb-3">
@@ -67,14 +70,14 @@
 {% endblock page_content %}
 <!-- Categories -->
 {% block all_categorys %}
-{% if all_categories %}
+{% if categories %}
 <div class="card border-secondary-emphasis mb-3 sticky-top" style="max-width: 24rem; top:105px">
     <div class="card-header">
-        <b class="text-primary-emphasis">All Post Categories</b>
+        <div class="text-primary-emphasis fs-3">All Post Categories</div>
     </div>
     <div class="card-body text-secondary">
         <!-- All Categories -->
-        {% for category in all_categories %}
+        {% for category in categories %}
         <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
             <span class="">#{{ category.title }}</span>
         </a>

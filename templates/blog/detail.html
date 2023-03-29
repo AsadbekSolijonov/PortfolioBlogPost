@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
+<!-- Title -->
+{% block title %}
+Detail
+{% endblock %}
 <!-- Post -->
 {% block page_content %}
-<h1 id="top0">Image</h1>
+<h1>Image</h1>
 <hr>
-{% if blog_detail %}
+{% if post %}
 <small>
     <!-- Post Title -->
-    <h1 class="text-primary-emphasis" id="{{blog_detail.title|slugify }}">{{ blog_detail.title|title}}</h1>
+    <h1 class="text-primary-emphasis" id="{{post.title|slugify }}">{{ post.title|title}}</h1>
     <!-- Post Category -->
     <p>
         <!-- Author -->
@@ -15,7 +19,7 @@
         <!-- TimeSince -->
         <span class="text-secondary-emphasis">
             <i class="fa-solid fa-clock"></i>
-            {{blog_detail.created_on}} &nbsp;|&nbsp;
+            {{post.created_on}} &nbsp;|&nbsp;
         </span>
         <!-- Count Comments -->
         <a class="text-secondary text-decoration-none" href="#users-comment">
@@ -25,7 +29,7 @@
         &nbsp;|&nbsp;
         <!-- All Categories -->
         <i class="fa-solid fa-tags"></i>
-        {% for category in blog_detail.category.all %}
+        {% for category in post.category.all %}
         <a class="btn btn-secondary" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
             <b># {{ category.title }}</b>
         </a>
@@ -34,15 +38,15 @@
     <!-- Post body -->
     <p class="">
         <!-- Post Words -->
-        <p class="fs-5">{{ blog_detail.body}}</p>
+        <p class="fs-5">{{ post.body}}</p>
         <!-- Post words count -->
-        <p class="p-2 text-bg-light rounded-end text-center" style="width: 100px;">{{ blog_detail.body | wordcount }} words</p>
+        <p class="p-2 text-bg-light rounded-end text-center" style="width: 100px;">{{ post.body | wordcount }} words</p>
     </p>
 </small>
 <!-- Comment -->
 <h3 class="mb-3 text-primary-emphasis sticky-top bg-white" style="top: 87px">Leave Comment:</h3>
 <!-- Comment Form -->
-<form action="{% url 'blog_detail' blog_detail.id  %}" method="post">
+<form action="{% url 'blog_detail' post.id  %}" method="post">
     {% csrf_token %}
     <!-- Author Input -->
     <div class="form-group">
@@ -91,7 +95,7 @@
         <!-- Body -->
         <p class="pb-3 mb-0 small lh-sm border-bottom">
             <strong class="d-block text-gray-dark">@{{ comment.author|lower }}</strong>
-            {{ comment.body }}
+            {{ comment.body|safe}}
         </p>
     </div>
     {% endfor %}
@@ -101,7 +105,7 @@
     </div>
     {% endif %}
     <small class="d-block text-end mt-3">
-        <a class="text-decoration-none" href="#top0">
+        <a class="text-decoration-none" href="#{{blog_detail.title|slugify }}">
             <!-- Page Up button -->
             <i class="fa-solid fs-3 fa-circle-chevron-up text-body-tertiary"></i>
         </a>
@@ -114,16 +118,16 @@
 </div>
 {% endif %}
 {% endblock page_content %}
-
+<!-- Categories -->
 {% block all_categorys %}
-{% if all_categories %}
-<div class="card border-secondary-emphasis mb-3 sticky-top" style="max-width: 24rem; top:105px">
+{% if categories %}
+<div class="card border-secondary-emphasis mb-3" style="max-width: 24rem;">
     <div class="card-header">
-        <b class="text-primary-emphasis">All Post Categories</b>
+        <div class="text-primary-emphasis fs-3">All Post Categories</div>
     </div>
     <div class="card-body text-secondary">
         <!-- All Categories -->
-        {% for category in all_categories %}
+        {% for category in categories %}
         <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
             <span class="">#{{ category.title }}</span>
         </a>
@@ -131,8 +135,27 @@
     </div>
 </div>
 {% else %}
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning sticky-top" role="alert" style="top: 105px">
     There is no information
 </div>
 {% endif %}
 {% endblock all_categorys %}
+<!-- Table Of Content -->
+{% block detailcontents %}
+<div class="card border-secondary-emphasis mb-3 sticky-top" style="max-width: 24rem; top: 105px;">
+    <div class="card-header text-primary-emphasis fs-3">Table Of Contents</div>
+    <div class="container card-body">
+        <h5 class="card-title">Light card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+</div>
+{% endblock detailcontents %}
+<!-- Mark As Read -->
+{% block markasRead %}
+<div class="d-flex flex-row justify-content-center sticky-top" style="top: 318px;">
+    <div class="p-2"> Mark as Complated</div>
+    <div class="p-2">
+        <i class="fa-regular fa-bookmark"></i>
+    </div>
+</div>
+{% endblock markasRead %}
