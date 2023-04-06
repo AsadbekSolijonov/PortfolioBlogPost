@@ -10,7 +10,7 @@ Detail
 {% if post %}
 <small>
     <!-- Post Title -->
-    <h1 class="text-primary-emphasis" id="{{post.title|slugify }}">{{ post.title|title}}</h1>
+    <h1 class="text-primary-emphasis">{{ post.title|title}}</h1>
     <!-- Post Category -->
     <p>
         <!-- Author -->
@@ -38,7 +38,7 @@ Detail
     <!-- Post body -->
     <p class="">
         <!-- Post Words -->
-        <p class="fs-5">{{ post.body}}</p>
+        <p class="fs-5">{{ post.body|safe}}</p>
         <!-- Post words count -->
         <p class="p-2 text-bg-light rounded-end text-center" style="width: 100px;">{{ post.body | wordcount }} words</p>
     </p>
@@ -105,7 +105,7 @@ Detail
     </div>
     {% endif %}
     <small class="d-block text-end mt-3">
-        <a class="text-decoration-none" href="#{{blog_detail.title|slugify }}">
+        <a class="text-decoration-none" href="#">
             <!-- Page Up button -->
             <i class="fa-solid fs-3 fa-circle-chevron-up text-body-tertiary"></i>
         </a>

@@ -78,7 +78,7 @@ All Blogs
     <div class="card-body text-secondary">
         <!-- All Categories -->
         {% for category in categories %}
-        <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title %}">
+        <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title|slugify %}">
             <span class="">#{{ category.title }}</span>
         </a>
         {% endfor %}
