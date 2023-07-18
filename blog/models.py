@@ -1,10 +1,12 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+
+
 # Create your models here.
 class Category(models.Model):
     # Kerakli maydon 
     title = models.CharField(max_length=255)
-    
+
     # Bazada titlega nima yozilgani ko'rinib turishi uchun
     def __str__(self):
         return self.title
@@ -14,6 +16,7 @@ class Category(models.Model):
         if self.title:
             self.title = self.title.title().replace(' ', '-')
         super().save(*args, **kwargs)
+
 
 class Post(models.Model):
     # Bitta Post ko'pgina Categoriyaga tushushi mumkin va Bitta Kategoriya Ko'pgina Postlarga tushishi mumkin.
@@ -29,6 +32,7 @@ class Post(models.Model):
     # Bazada titlega nima yozilgani ko'rinib turishi uchun
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     # Bitta Postga Ko'pgina Kommentaraiya yozish mumkin.

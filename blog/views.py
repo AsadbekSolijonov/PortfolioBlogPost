@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from blog.models import Post, Comment, Category
 from blog.forms import CommentForm
+
+
 # Hamma Bloglar Ro'yxatini qaytaruvchi funksiya
 def blogs(request):
     blogs = Post.objects.all().order_by('-created_on')
@@ -11,6 +13,7 @@ def blogs(request):
         'categories': categories,
     }
     return render(request, 'blog/blogs.html', context)
+
 
 # Blogni #tag(category) bo'yicha filter qilib olish uchun
 def blog_category(request, tag):
@@ -24,7 +27,6 @@ def blog_category(request, tag):
         'categories': categories,
     }
     return render(request, 'blog/category.html', context)
-
 
 
 # Blog haqida batavsil ma'lumot beruvchi funksiya
@@ -42,7 +44,7 @@ def blog_detail(request, pk):
 
     except:
         post = None
-    
+
     # Kommentariya qoldirish
     # Foydalanuvchiga Kamment Formani ko'rsatish uchun
     form = CommentForm()

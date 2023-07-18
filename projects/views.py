@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from projects.models import Project
+
+
 # Create your views here.
 def project(request):
     return render(request, 'projects/projects.html')
@@ -14,11 +16,11 @@ def all_projects(request):
 
 
 def project_detail(request, pk):
-    try: 
+    try:
         project_detail = Project.objects.get(pk=pk)
     except:
         project_detail = None
     context = {
-    'detail': project_detail, 
+        'detail': project_detail,
     }
     return render(request, 'projects/project_detail.html', context)
