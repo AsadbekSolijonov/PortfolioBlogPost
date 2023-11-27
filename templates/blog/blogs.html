@@ -49,7 +49,7 @@ All Blogs
                 {% endfor %}
             </small>
             <!-- Post Body Text -->
-            <p>{{ blog.body|truncatewords:50}}</p>
+            <p>{{ blog.body|truncatewords:50|safe}}</p>
             <!-- Card Footer -->
             <footer class="blockquote-footer">
                 Someone famous in
@@ -79,7 +79,7 @@ All Blogs
         <!-- All Categories -->
         {% for category in categories %}
         <a class="text-decoration-none btn btn-secondary small ml-1 mb-2" style="--bs-btn-padding-y: .10rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="{% url 'blog_category' category.title|slugify %}">
-            <span class="">#{{ category.title }}</span>
+            <span class="">#{{ category.title}}</span>
         </a>
         {% endfor %}
     </div>

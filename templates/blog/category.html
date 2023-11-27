@@ -40,7 +40,7 @@ Category
                 &nbsp;
                 {% endfor %}
             </small>
-            <p>{{ post.body|truncatewords:50 }}</p>
+            <p>{{ post.body|truncatewords:50|safe}}</p>
             <footer class="blockquote-footer">
                 Someone famous in
                 <cite title="Source Title">Source Title</cite>

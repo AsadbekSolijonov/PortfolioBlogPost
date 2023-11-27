@@ -17,10 +17,10 @@ def all_projects(request):
 
 def project_detail(request, pk):
     try:
-        project_detail = Project.objects.get(pk=pk)
+        detail = Project.objects.get(pk=pk)
     except:
-        project_detail = None
+        detail = None
     context = {
-        'detail': project_detail,
+        'detail': detail,
     }
     return render(request, 'projects/project_detail.html', context)
